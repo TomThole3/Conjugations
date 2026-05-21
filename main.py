@@ -20,8 +20,28 @@ class Conjugar:
         pass
     
 class InputOutput:
-    pass
+    def get_settings():
+        valid_tenses = ("present", "present progressive", "preterite", "imperfect", "future",
+                        "conditional", "present perfect", "pluperfect", "future perfect", "conditional perfect",
+                        "present subjunctive", "imperfect subjunctive", "present perfect subjunctive",
+                        "pluperfect subjunctive", "past progressive", "future progressive" "imperative affirmative",
+                        "negative imperative")
 
+        print(
+        "What tenses would you like to cover?"
+        
+        )
+        while True:
+            tenses = input().lower().split(",")
+            stripped_set = set([tense.strip() for tense in tenses])
+            if stripped_set.issubset(valid_tenses):
+                break
+            else:
+                print("Invalid input")
+            
+    def get_verbs():
+        pass
+    
 class DatabaseHandling:
     pass
         
