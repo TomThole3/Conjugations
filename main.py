@@ -66,12 +66,11 @@ class InputOutput:
     
 class DatabaseHandling:
     
-    def excel_to_db(self):
+    def excel_to_db(self): #test deze
         path = r"C:\Users\tthol\OneDrive\Bureaublad\de echte git programmaties\spanish verb conjugations\verbs excel.xlsx"
-        conn = sqlite3.connect('verbs')
         ex = pd.read_excel(path)
-        for table, df in ex.items():
-            df.to_sql(table, conn)
+        conn = sqlite3.connect('verbs.db')
+        ex.to_sql('Blad1', conn)
 
 def main():
     io = InputOutput()
