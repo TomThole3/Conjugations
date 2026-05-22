@@ -15,11 +15,11 @@ class Conjugar:
 class InputOutput:
     
     def get_tenses(self):
-        valid_tenses = ("present", "present progressive", "preterite", "imperfect", "future",
+        valid_tenses = {"present", "present progressive", "preterite", "imperfect", "future",
                         "conditional", "present perfect", "pluperfect", "future perfect", "conditional perfect",
                         "present subjunctive", "imperfect subjunctive", "present perfect subjunctive",
                         "pluperfect subjunctive", "past progressive", "future progressive" "imperative affirmative",
-                        "negative imperative")
+                        "negative imperative"}
 
         print("What tenses would you like to cover?")
         
@@ -29,19 +29,29 @@ class InputOutput:
             if stripped_set.issubset(valid_tenses):
                 break
             else:
-                print("Invalid input")
+                print("Please select a valid set of tenses")
         return stripped_set
     
-    def verb_type(self):
+    def verb_selector(self):
         while True:
-            type_ = input("Do you want to select verbs based on ending, power or name? ")
-            type_ = type_.strip().lower()
-            if type_ == "ending" or type_ == "power" or type_ == "name":
-                return type_
+            selector = input("Do you want to select verbs based on ending, power or name? ")
+            selector = selector.strip().lower()
+            if selector == "ending" or selector == "power" or selector == "name":
+                return selector
             print("Invalid input")
-        
             
-    def get_verbs(self):
+    def get_ending(self):
+        print("Which verb endings would you like to practice?")
+        while True:
+            ending = input("Choose one from ir, ar, er")
+            if ending == "ir" or ending == "ar" or ending == 'er':
+                return ending
+            print('Please select a valid ending')
+    
+    def get_power(self):
+        pass
+    
+    def get_names(self):
         pass
     
 class DatabaseHandling:
