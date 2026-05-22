@@ -21,7 +21,7 @@ class InputOutput:
                         "pluperfect subjunctive", "past progressive", "future progressive" "imperative affirmative",
                         "negative imperative"}
 
-        print("What tenses would you like to cover?")
+        print("Please indicate which tenses you would like to cover?")
         
         while True:
             tenses = input().lower().split(",")
@@ -34,16 +34,16 @@ class InputOutput:
     
     def verb_selector(self):
         while True:
-            selector = input("Do you want to select verbs based on ending, power or name? ")
+            selector = input("Would you like to select verbs based on ending, power or name? ")
             selector = selector.strip().lower()
             if selector == "ending" or selector == "power" or selector == "name":
                 return selector
-            print("Invalid input")
+            print("Please enter a valid input")
             
     def get_ending(self):
         print("Which verb endings would you like to practice?")
         while True:
-            ending = input("Choose one from ir, ar, er")
+            ending = input("Choose one from ir, ar, er ")
             if ending == "ir" or ending == "ar" or ending == 'er':
                 return ending
             print('Please select a valid ending')
