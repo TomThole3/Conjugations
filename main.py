@@ -4,13 +4,17 @@ Created on Thu May 21 10:18:36 2026
 
 @author: tthol
 """
+
+import sqlite3
+import pandas as pd
+
 class Conjugar:
     def __init__(self, io):
         self.io = io
     
     def run(self):
-        tenses = self.io.get_tenses()
-        verb_type = self.io.verb_type()
+        db = DatabaseHandling()
+        db.excel_to_db()
     
 class InputOutput:
     
@@ -59,9 +63,15 @@ class InputOutput:
     def get_names(self):
         pass
     
+    
 class DatabaseHandling:
-    pass
-
+    
+    def excel_to_db(self):
+        path = r"C:\Users\tthol\OneDrive\Bureaublad\de echte git programmaties\spanish verb conjugations\verbs excel.xlsx"
+        conn = sqlite3.connect('verbs')
+        ex = pd.read_excel(path)
+        for table, df in ex.items():
+            df.to_sql(table, conn)
 
 def main():
     io = InputOutput()
