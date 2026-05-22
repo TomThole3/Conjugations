@@ -43,13 +43,18 @@ class InputOutput:
     def get_ending(self):
         print("Which verb endings would you like to practice?")
         while True:
-            ending = input("Choose one from ir, ar, er ")
+            ending = input("Please choose one from ir, ar, er ").lower().strip()
             if ending == "ir" or ending == "ar" or ending == 'er':
                 return ending
             print('Please select a valid ending')
     
     def get_power(self):
-        pass
+        print("Which power would you like to practice?")
+        while True:
+            ending = input("Please choose one from strong, weak ").lower().strip()
+            if ending == "weak" or ending == 'strong':
+                return ending
+            print('Please select a valid ending')
     
     def get_names(self):
         pass
