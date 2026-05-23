@@ -15,6 +15,7 @@ class Conjugar:
     def run(self):
         db = DatabaseHandling()
         db.excel_to_db()
+        db.get_names()
     
 class InputOutput:
     
@@ -58,7 +59,7 @@ class InputOutput:
             ending = input("Please choose one from strong, weak ").lower().strip()
             if ending == "weak" or ending == 'strong':
                 return ending
-            print('Please select a valid ending')
+            print('Please select a valid power')
     
     def get_names(self):
         pass
@@ -66,12 +67,22 @@ class InputOutput:
     
 class DatabaseHandling:
     
-    def excel_to_db(self): #test deze
+    def __init__(self):
+        pass
+    
+    def excel_to_db(self):
         path = r"C:\Users\tthol\OneDrive\Bureaublad\de echte git programmaties\spanish verb conjugations\verbs excel.xlsx"
         ex = pd.read_excel(path)
-        conn = sqlite3.connect('verbs.db')
-        ex.to_sql('Blad1', conn)
-
+        with sqlite3.connect('verbs.db') as conn:
+            ex.to_sql('Blad1', conn, if_exists='replace')
+    
+    def get_names(self):
+        with sqlite3.connect('verbs.db') as conn:
+            c = conn.cursor()
+            queried_names = c.execute("SELECT DISTINCT infinitive FROM  Blad1")
+            names = queried_names.fetchall()
+        return [name for (name, ) in names]
+    
 def main():
     io = InputOutput()
     db = DatabaseHandling()
