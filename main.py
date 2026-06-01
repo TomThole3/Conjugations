@@ -9,13 +9,20 @@ import sqlite3
 import pandas as pd
 
 class Conjugar:
-    def __init__(self, io):
+    def __init__(self, io, db):
         self.io = io
+        self.db = db
     
     def run(self):
-        db = DatabaseHandling()
-        db.excel_to_db()
-        db.get_names()
+        selector = self.io.verb_selector()
+        if selector == 'ending':
+            ending = self.io.get_ending()
+        elif selector == 'power':
+            power = self.io.get_power()
+        else:
+            infinitives = self.db.get_infinitives()
+            names = self.io.get_names(infinitives)
+            
     
 class InputOutput:
     
@@ -61,9 +68,22 @@ class InputOutput:
                 return ending
             print('Please select a valid power')
     
-    def get_names(self):
-        pass
-    
+    def get_names(self, names):
+        selected = []
+        while True:
+            print("Please name one infinitive you would like to practice, or type 'stop' if your selection is complete")
+            print("The list of verbs to choose from is " + ', '.join(names))
+            infinitive = input().lower().strip()
+            if infinitive == "stop":
+                return selected
+            elif infinitive in names:
+                selected.append(infinitive)
+                names.remove(infinitive)
+                print('The list of verbs you have selected is' + ', '.join(selected))
+            else:
+                print('Please select a valid infinitive')
+            
+
     
 class DatabaseHandling:
     
@@ -76,17 +96,17 @@ class DatabaseHandling:
         with sqlite3.connect('verbs.db') as conn:
             ex.to_sql('Blad1', conn, if_exists='replace')
     
-    def get_names(self):
+    def get_infinitives(self):
         with sqlite3.connect('verbs.db') as conn:
             c = conn.cursor()
-            queried_names = c.execute("SELECT DISTINCT infinitive FROM  Blad1")
+            queried_names = c.execute("SELECT DISTINCT infinitive FROM Blad1")
             names = queried_names.fetchall()
         return [name for (name, ) in names]
     
 def main():
     io = InputOutput()
     db = DatabaseHandling()
-    app = Conjugar(io)
+    app = Conjugar(io, db)
     app.run()
     
 if __name__ == "__main__":
