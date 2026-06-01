@@ -7,6 +7,8 @@ Created on Thu May 21 10:18:36 2026
 
 import sqlite3
 import pandas as pd
+import os
+from pathlib import Path
 
 class Conjugar:
     def __init__(self, io, db):
@@ -14,100 +16,66 @@ class Conjugar:
         self.db = db
     
     def run(self):
-        selector = self.io.verb_selector()
-        if selector == 'ending':
-            ending = self.io.get_ending()
-        elif selector == 'power':
-            power = self.io.get_power()
-        else:
-            infinitives = self.db.get_infinitives()
-            names = self.io.get_names(infinitives)
+        possible_tenses = self.db.get_unique_values('tense')
+        tenses = self.io.get_filters(possible_tenses, 'tense')
+        possible_endings = self.db.get_unique_values('ending')
+        endings = self.io.get_filters(possible_endings, 'ending')
+        possible_powers = self.db.get_unique_values('power')
+        power = self.io.get_filters(possible_powers, 'power')
+        possible_infinitives = self.db.get_unique_values('infinitive')
+        infinitives = self.io.get_filters(possible_infinitives, 'infinitive')
             
     
 class InputOutput:
     
-    def get_tenses(self):
-        valid_tenses = {"present", "present progressive", "preterite", "imperfect", "future",
-                        "conditional", "present perfect", "pluperfect", "future perfect", "conditional perfect",
-                        "present subjunctive", "imperfect subjunctive", "present perfect subjunctive",
-                        "pluperfect subjunctive", "past progressive", "future progressive" "imperative affirmative",
-                        "negative imperative"}
-
-        print("Please indicate which tenses you would like to cover?")
-        
-        while True:
-            tenses = input().lower().split(",")
-            stripped_set = set([tense.strip() for tense in tenses])
-            if stripped_set.issubset(valid_tenses):
-                break
-            else:
-                print("Please select a valid set of tenses")
-        return stripped_set
-    
-    def verb_selector(self):
-        while True:
-            selector = input("Would you like to select verbs based on ending, power or name? ")
-            selector = selector.strip().lower()
-            if selector == "ending" or selector == "power" or selector == "name":
-                return selector
-            print("Please enter a valid input")
-            
-    def get_ending(self):
-        print("Which verb endings would you like to practice?")
-        while True:
-            ending = input("Please choose one from ir, ar, er ").lower().strip()
-            if ending == "ir" or ending == "ar" or ending == 'er':
-                return ending
-            print('Please select a valid ending')
-    
-    def get_power(self):
-        print("Which power would you like to practice?")
-        while True:
-            ending = input("Please choose one from strong, weak ").lower().strip()
-            if ending == "weak" or ending == 'strong':
-                return ending
-            print('Please select a valid power')
-    
-    def get_names(self, names):
+    def get_filters(self, options, type_string):
         selected = []
         while True:
-            print("Please name one infinitive you would like to practice, or type 'stop' if your selection is complete")
-            print("The list of verbs to choose from is " + ', '.join(names))
-            infinitive = input().lower().strip()
-            if infinitive == "stop":
+            print(f"Please name one {type_string} you would like to practice, type 'all' to select all, type 'stop' if your selection is complete")
+            print("The list to choose from is: " + ', '.join(options))
+            selection = input().lower().strip()
+            if selection == "stop":
                 return selected
-            elif infinitive in names:
-                selected.append(infinitive)
-                names.remove(infinitive)
-                print('The list of verbs you have selected is' + ', '.join(selected))
+            elif selection == 'all':
+                selected.append(options)
+                return selected
+            elif selection in options:
+                selected.append(selection)
+                options.remove(selection)
+                print('The list you have selected is' + ', '.join(selected))
             else:
-                print('Please select a valid infinitive')
+                print(f'Please select a valid {type_string}')
+            if not options:
+                return selected
             
-
     
 class DatabaseHandling:
     
     def __init__(self):
         pass
-    
+        
     def excel_to_db(self):
-        path = r"C:\Users\tthol\OneDrive\Bureaublad\de echte git programmaties\spanish verb conjugations\verbs excel.xlsx"
+        cwd = Path.cwd()
+        path = cwd.parents[0]
+        path = os.path.join(path, "verbs excel.xlsx")
         ex = pd.read_excel(path)
         with sqlite3.connect('verbs.db') as conn:
             ex.to_sql('Blad1', conn, if_exists='replace')
     
-    def get_infinitives(self):
+    def get_unique_values(self, column):
         with sqlite3.connect('verbs.db') as conn:
             c = conn.cursor()
-            queried_names = c.execute("SELECT DISTINCT infinitive FROM Blad1")
+            queried_names = c.execute(f"SELECT DISTINCT {column} FROM Blad1")
             names = queried_names.fetchall()
         return [name for (name, ) in names]
+        
     
 def main():
     io = InputOutput()
     db = DatabaseHandling()
     app = Conjugar(io, db)
     app.run()
+    
     
 if __name__ == "__main__":
     main()
