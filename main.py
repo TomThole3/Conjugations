@@ -10,6 +10,7 @@ import pandas as pd
 import os
 from pathlib import Path
 from itertools import chain
+import random as rand
 
 class Conjugar:
     def __init__(self, io, db):
@@ -20,13 +21,15 @@ class Conjugar:
         tenses, endings, powers, infinitives = (self.io.get_filters(
             self.db.get_unique_values(field), field) for field in ('tense', 'ending', 'power', 'infinitive'))
         verbs = self.db.get_filtered_entries(tenses, endings, powers, infinitives)
-        print(verbs)
+        rand.shuffle(verbs)
+         
+        
         
 class InputOutput:
     
     def get_filters(self, options, type_string):
         selected = []
-        while True:
+        while options:
             print(f"Please name one {type_string} you would like to practice, type 'all' to select all, type 'stop' if your selection is complete")
             print("The list to choose from is: " + ', '.join(options))
             selection = input().lower().strip()
@@ -41,8 +44,10 @@ class InputOutput:
                 print('The list you have selected is: ' + ', '.join(selected))
             else:
                 print(f'Please select a valid {type_string}')
-            if not options:
-                return selected
+                
+    def print_question(self, infinitive, tense, person):
+        print(f'{infinitive}, {tense}')
+        return input(f'{person} ')
             
     
 class DatabaseHandling:
