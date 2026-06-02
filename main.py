@@ -33,7 +33,10 @@ class Conjugar:
             wrong_index = min(3, len(verb_list))
             if user_answer != answer:
                 verb_list.insert(wrong_index, verb_list[0])
-                self.io.print_correct(answer)
+                check = self.io.print_correct(answer)
+                if len(check) > 0:
+                    wrong.pop(0)
+                    verb_list.pop(max(0, wrong_index-1))
                 wrong.append(verb_list[0])
             verb_list.pop(0)
         if repeat:
@@ -66,9 +69,17 @@ class InputOutput:
     
     def print_correct(self, answer):
         print(f"The correct answer was: {answer}")
+        return input("Press enter to skip, type anything to rectify answer ")
         
     def clear_console(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
+        try:
+            from IPython import get_ipython
+            get_ipython().run_line_magic('clear', '')
+        except Exception:
+            os.system('cls' if os.name == 'nt' else 'clear')
+        
+    def empty_wrong_error(self):
+        print("No wrong answer has been given yet")
             
     
 class DatabaseHandling:
@@ -87,7 +98,7 @@ class DatabaseHandling:
     def get_unique_values(self, column):
         with sqlite3.connect('verbs.db') as conn:
             c = conn.cursor()
-            queried_names = c.execute(f"SELECT DISTINCT {column} FROM Blad1")
+            queried_names = c.execute(f"""SELECT DISTINCT {column} FROM Blad1""")
             names = queried_names.fetchall()
         return [name for (name, ) in names]
     
