@@ -27,11 +27,13 @@ class Conjugar:
     def gameloop(self, verb_list, repeat = True):
         wrong = []
         while verb_list:
+            self.io.clear_console()
             infinitive, tense, person, answer = verb_list[0]
             user_answer = self.io.print_question(infinitive, tense, person)
             wrong_index = min(3, len(verb_list))
             if user_answer != answer:
                 verb_list.insert(wrong_index, verb_list[0])
+                self.io.print_correct(answer)
                 wrong.append(verb_list[0])
             verb_list.pop(0)
         if repeat:
@@ -61,6 +63,12 @@ class InputOutput:
     def print_question(self, infinitive, tense, person):
         print(f'{infinitive}, {tense}')
         return input(f'{person} ')
+    
+    def print_correct(self, answer):
+        print(f"The correct answer was: {answer}")
+        
+    def clear_console(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
             
     
 class DatabaseHandling:
