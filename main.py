@@ -22,8 +22,21 @@ class Conjugar:
             self.db.get_unique_values(field), field) for field in ('tense', 'ending', 'power', 'infinitive'))
         verbs = self.db.get_filtered_entries(tenses, endings, powers, infinitives)
         rand.shuffle(verbs)
-         
+        self.gameloop(verbs)
         
+    def gameloop(self, verb_list, repeat = True):
+        wrong = []
+        while verb_list:
+            infinitive, tense, person, answer = verb_list[0]
+            user_answer = self.io.print_question(infinitive, tense, person)
+            wrong_index = min(3, len(verb_list))
+            if user_answer != answer:
+                verb_list.insert(wrong_index, verb_list[0])
+                wrong.append(verb_list[0])
+            verb_list.pop(0)
+        if repeat:
+            self.gameloop(wrong, False)
+                
         
 class InputOutput:
     
@@ -71,12 +84,10 @@ class DatabaseHandling:
         return [name for (name, ) in names]
     
     def get_filtered_entries(self, tenses, endings, powers, infinitives):
-        print(tenses, endings, powers, infinitives)
         tense_placeholder = ', '.join('?' for _ in tenses)
         ending_placeholder = ', '.join('?' for _ in endings)
         power_placeholder = ', '.join('?' for _ in powers)
         infinitive_placeholder = ', '.join('?' for _ in infinitives)
-        print(tense_placeholder, ending_placeholder, power_placeholder, infinitive_placeholder)
         query = f"""SELECT infinitive, tense, person, verb FROM Blad1
                     WHERE tense IN ({tense_placeholder})
                     AND ending IN ({ending_placeholder})
