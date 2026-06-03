@@ -21,7 +21,7 @@ class DatabaseHandling:
             ex.to_sql('Blad1', conn, if_exists='replace')
 
     def get_unique_values(self, column):
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             c = conn.cursor()
             queried_names = c.execute(f"SELECT DISTINCT {column} FROM Blad1")
             return [name for (name,) in queried_names.fetchall()]
