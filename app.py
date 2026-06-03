@@ -35,22 +35,28 @@ class GameLogic:
         wrong = []
         while verb_list:
             self.io.clear_console()
+            print(repeat)
+            print(verb_list)
+            print(wrong)
             infinitive, tense, person, answer = verb_list[0]
-            self.io.print_stats(session.total_words, session.passed+1)
+            self.io.print_stats(session.total_words, session.passed)
             user_answer = self.io.print_question(infinitive, tense, person)
             wrong_index = min(3, len(verb_list))
             if user_answer != answer:
                 verb_list.insert(wrong_index, verb_list[0])
-                session.total_words += 1 if repeat else 0
+                if verb_list[0] in wrong:
+                    session.total_words += 1 if repeat else 0
+                else:
+                    session.total_words += 2 if repeat else 1
+                if not verb_list[0] in wrong:
+                    wrong.append(verb_list[0])
                 check = self.io.print_correct(answer)
-                wrong.append(verb_list[0])
                 if check == 'correct':
                     wrong.pop()
                     verb_list.pop(max(0, wrong_index-1))
                 elif check == 'table':
                     self.table(infinitive)
-            else:
-                session.passed += 1
+            session.passed += 1
             verb_list.pop(0)
         if repeat:
             self.gameloop(wrong, session, False)
@@ -58,4 +64,4 @@ class GameLogic:
     def table(self, infinitive):
         table_information = self.db.get_verb(infinitive)
         self.io.print_table(table_information)
-        
+         
