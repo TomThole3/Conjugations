@@ -35,9 +35,6 @@ class GameLogic:
         wrong = []
         while verb_list:
             self.io.clear_console()
-            print(repeat)
-            print(verb_list)
-            print(wrong)
             infinitive, tense, person, answer = verb_list[0]
             self.io.print_stats(session.total_words, session.passed)
             user_answer = self.io.print_question(infinitive, tense, person)
