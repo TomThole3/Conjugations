@@ -77,7 +77,7 @@ class InputOutput:
                 print(f'Please select a valid {type_string}')
                 
     def print_question(self, infinitive, tense, person):
-        print(f'{infinitive}, {tense}')
+        print(f'{infinitive} {tense}')
         return input(f'{person} ')
     
     def print_correct(self, answer):
@@ -100,6 +100,7 @@ class InputOutput:
     def print_table(self, table_information):
         for (person, verb) in table_information:
             print(f'{person}, {verb}')
+        input("Press enter to continue")
             
     
 class DatabaseHandling:
