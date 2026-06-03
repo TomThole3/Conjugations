@@ -7,7 +7,7 @@ class Conjugar:
     def __init__(self, io, db):
         self.io = io
         self.db = db
-        self.logic = GameLogic()
+        self.logic = GameLogic(io, db)
         
     def run(self):
         tenses, endings, powers, infinitives = (self.io.get_filters(
@@ -27,6 +27,10 @@ class Session:
         
 class GameLogic:
 
+    def __init__(self, io, db):
+        self.io = io
+        self.db = db
+        
     def gameloop(self, verb_list, session, repeat = True):
         wrong = []
         while verb_list:
