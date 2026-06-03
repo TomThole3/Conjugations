@@ -27,7 +27,7 @@ class Conjugar:
             wrong_index = min(3, len(verb_list))
             if user_answer != answer:
                 verb_list.insert(wrong_index, verb_list[0])
-                self.total_words += 1
+                self.total_words += 1 if repeat else 0
                 check = self.io.print_correct(answer)
                 if check == 'correct':
                     wrong.pop(0)
@@ -44,4 +44,3 @@ class Conjugar:
     def table(self, infinitive):
         table_information = self.db.get_verb(infinitive)
         self.io.print_table(table_information)
-        
