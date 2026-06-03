@@ -40,9 +40,6 @@ class InputOutput:
         except Exception:
             os.system('cls' if os.name == 'nt' else 'clear')
         
-    def empty_wrong_error(self):
-        print("No wrong answer has been given yet")
-        
     def print_table(self, table_information):
         for (person, verb) in table_information:
             print(f'{person}, {verb}')
