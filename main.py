@@ -39,15 +39,21 @@ class Conjugar:
                 verb_list.insert(wrong_index, verb_list[0])
                 self.total_words += 1
                 check = self.io.print_correct(answer)
-                if len(check) > 0:
+                if check == 'correct':
                     wrong.pop(0)
                     verb_list.pop(max(0, wrong_index-1))
+                elif check == 'table':
+                    self.table(infinitive)
                 wrong.append(verb_list[0])
             else:
                 self.passed += 1
             verb_list.pop(0)
         if repeat:
             self.gameloop(wrong, False)
+            
+    def table(self, infinitive):
+        table_information = self.db.get_verb(infinitive)
+        self.io.print_table(table_information)
                 
         
 class InputOutput:
@@ -76,10 +82,10 @@ class InputOutput:
     
     def print_correct(self, answer):
         print(f"The correct answer was: {answer}")
-        return input("Press enter to skip, type anything to rectify answer ")
+        return input("Press enter to skip, type correct to rectify answer, type table to see the entire table ")
     
     def print_stats(self, total, passed):
-        print(f'Word {passed}/{total}')
+        print(f'Progress: word {passed}/{total}')
         
     def clear_console(self):
         try:
@@ -90,6 +96,10 @@ class InputOutput:
         
     def empty_wrong_error(self):
         print("No wrong answer has been given yet")
+        
+    def print_table(self, table_information):
+        for (person, verb) in table_information:
+            print(f'{person}, {verb}')
             
     
 class DatabaseHandling:
@@ -126,6 +136,13 @@ class DatabaseHandling:
             c = conn.cursor()
             queried_entries = c.execute(query, tuple(chain.from_iterable((tenses, endings, powers, infinitives))))
             names = queried_entries.fetchall()
+        return names
+    
+    def get_verb(self, infinitive):
+        with sqlite3.connect('verbs.db') as conn:
+            c = conn.cursor()
+            queried_names = c.execute(f"""SELECT person, verb FROM Blad1 WHERE infinitive = '{infinitive}'""")
+            names = queried_names.fetchall()
         return names
         
     
