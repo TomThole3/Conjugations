@@ -42,8 +42,8 @@ class DatabaseHandling:
             return queried_entries.fetchall()
 
     def get_verb(self, infinitive):
-        with sqlite3.connect('verbs.db') as conn:
+        with self.get_connection() as conn:
             c = conn.cursor()
-            queried_names = c.execute(f"""SELECT person, verb FROM Blad1 WHERE infinitive = '{infinitive}'""")
+            queried_names = c.execute("""SELECT person, verb FROM Blad1 WHERE infinitive = ? """, (infinitive,))
             names = queried_names.fetchall()
         return names
