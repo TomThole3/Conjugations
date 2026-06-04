@@ -45,6 +45,9 @@ class InputOutput:
             print(f'{person}, {verb}')
         input("Press enter to continue")
         
-    def print_final_stats(self, total, incorrect, minutes, seconds):
+    def print_final_stats(self, total, incorrect, minutes, seconds, wrong):
         print(f'Session complete! It took a total of {minutes} minutes and {seconds} seconds')
         print(f'You answered {total-incorrect} out of the {total} questions right')
+        print('The words that you answered incorrectly were: ')
+        for (_, _, person, answer) in wrong:
+            print(f'{person} {answer}')

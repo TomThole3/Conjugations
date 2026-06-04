@@ -17,9 +17,9 @@ class Conjugar:
         verbs = self.db.get_filtered_entries(tenses, endings, powers, infinitives)
         rand.shuffle(verbs)
         session = Session(len(verbs))
-        self.logic.gameloop(verbs, session)
+        wrong = self.logic.gameloop(verbs, session)
         minutes, seconds = session.stop_time()
-        self.io.print_final_stats(session.original_total, session.incorrect, minutes, seconds)
+        self.io.print_final_stats(session.original_total, session.incorrect, minutes, seconds, wrong)
         
         
 class Session:
@@ -66,7 +66,8 @@ class GameLogic:
             session.passed += 1
             verb_list.pop(0)
         if repeat:
-            self.gameloop(wrong, session, False)
+            self.gameloop(wrong.copy(), session, False)
+            return wrong
             
     def table(self, infinitive):
         table_information = self.db.get_verb(infinitive)
