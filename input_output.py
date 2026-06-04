@@ -44,3 +44,7 @@ class InputOutput:
         for (person, verb) in table_information:
             print(f'{person}, {verb}')
         input("Press enter to continue")
+        
+    def print_final_stats(self, total, incorrect, minutes, seconds):
+        print(f'Session complete! It took a total of {minutes} minutes and {seconds} seconds')
+        print(f'You answered {total-incorrect} out of the {total} questions right')

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import random as rand
+import time
+
 
 class Conjugar:
     
@@ -16,14 +18,22 @@ class Conjugar:
         rand.shuffle(verbs)
         session = Session(len(verbs))
         self.logic.gameloop(verbs, session)
+        minutes, seconds = session.stop_time()
+        self.io.print_final_stats(session.original_total, session.incorrect, minutes, seconds)
         
         
 class Session:
     
     def __init__(self, total_words):
         self.total_words = total_words
+        self.original_total = total_words
         self.passed = 0
+        self.incorrect = 0
+        self.start_time = time.time()
         
+    def stop_time(self):
+        duration = time.time() - self.start_time
+        return int(duration/60), int(duration%60)
         
 class GameLogic:
 
@@ -45,7 +55,7 @@ class GameLogic:
                     session.total_words += 1 if repeat else 0
                 else:
                     session.total_words += 2 if repeat else 1
-                if not verb_list[0] in wrong:
+                    session.incorrect += 1 if repeat else 0
                     wrong.append(verb_list[0])
                 check = self.io.print_correct(answer)
                 if check == 'correct':
