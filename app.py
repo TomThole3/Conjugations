@@ -130,25 +130,26 @@ class GameLogic:
                     wrong.pop()
                     verb_list.pop(max(0, wrong_index-1))
                 elif check == 'table':
-                    self.table(infinitive)
+                    self.table(infinitive, tense)
             session.passed += 1
             verb_list.pop(0)
         if repeat:
             self.gameloop(wrong.copy(), session, False) # wrong answers are repeated
             return wrong
             
-    def table(self, infinitive):
+    def table(self, infinitive, tense):
         """
         Helper function to print table of an incorrect word's conjugations
 
         Parameters
         ----------
         infinitive : infinitive of the table to be printed
+        tense : tense of the table to be printed
 
         Returns
         -------
         None.
         """
-        table_information = self.db.get_verb(infinitive)
+        table_information = self.db.get_verb(infinitive, tense)
         self.io.print_table(table_information)
          

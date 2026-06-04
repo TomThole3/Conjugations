@@ -86,13 +86,14 @@ class DatabaseHandling:
             queried_entries = c.execute(query, tuple(chain.from_iterable((tenses, endings, powers, infinitives))))
             return queried_entries.fetchall()
 
-    def get_verb(self, infinitive):
+    def get_verb(self, infinitive, tense):
         """
         Query for all conjugations of a certain verb
 
         Parameters
         ----------
         infinitive : queried infinitive
+        tense : queried tense
 
         Returns
         -------
@@ -101,6 +102,6 @@ class DatabaseHandling:
         """
         with self.get_connection() as conn:
             c = conn.cursor()
-            queried_names = c.execute("""SELECT person, verb FROM Blad1 WHERE infinitive = ? """, (infinitive,))
+            queried_names = c.execute("""SELECT person, verb FROM Blad1 WHERE infinitive = ? AND tense = ? """ , (infinitive, tense))
             names = queried_names.fetchall()
         return names
