@@ -5,6 +5,14 @@ from database_handling import DatabaseHandling
 from app import Conjugar
     
 def main():
+    """
+    Main method that starts the application
+
+    Returns
+    -------
+    None.
+
+    """
     io = InputOutput()
     db = DatabaseHandling()
     app = Conjugar(io, db)
