@@ -34,8 +34,9 @@ class DatabaseHandling:
         None.
         """
         ex = pd.read_excel(self.excel_path)
+        sheet_name = pd.ExcelFile(self.excel_path).sheet_names[0]
         with self.get_connection() as conn:
-            ex.to_sql('Blad1', conn, if_exists='replace')
+            ex.to_sql(sheet_name, conn, if_exists='replace')
 
     def get_unique_values(self, column):
         """
