@@ -33,6 +33,7 @@ class Conjugar:
         -------
         None.
         """
+        self.db.excel_to_db()
         tenses, endings, powers, infinitives = (self.io.get_filters(
             self.db.get_unique_values(field), field) for field in ('tense', 'ending', 'power', 'infinitive'))
         verbs = self.db.get_filtered_entries(tenses, endings, powers, infinitives)

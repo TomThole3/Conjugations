@@ -13,7 +13,7 @@ class DatabaseHandling:
     def __init__(self):
         cwd = Path.cwd()
         self.db_path = cwd / 'verbs.db'
-        self.excel_path = cwd.parents[0] / 'verbs excel.xlsx'
+        self.excel_path = cwd / 'verbs.xlsx'
 
     def get_connection(self):
         """
@@ -34,7 +34,7 @@ class DatabaseHandling:
         None.
         """
         ex = pd.read_excel(self.excel_path)
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             ex.to_sql('Blad1', conn, if_exists='replace')
 
     def get_unique_values(self, column):
