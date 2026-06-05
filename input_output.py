@@ -23,10 +23,12 @@ class InputOutput:
         selected = []
         while options:
             print(f"Please name one {type_string} you would like to practice, type 'all' to select all, type 'stop' if your selection is complete")
-            print("The list to choose from is: " + ', '.join(options))
+            print('The list to choose from is: ' + ', '.join(options))
             selection = input().lower().strip()
-            if selection == "stop":
+            if selection == 'stop' and selected:
                 return selected
+            elif selection == 'stop' and not selected:
+                print(f'please select at least one {type_string} first')
             elif selection == 'all':
                 selected.extend(options)
                 return selected
@@ -67,8 +69,8 @@ class InputOutput:
         -------
         User's choice of the next action
         """
-        print(f"The correct answer was: {answer}")
-        return input("Press enter to skip, type correct to rectify answer, type table to see the entire table ")
+        print(f'The correct answer was: {answer}')
+        return input('Press enter to skip, type correct to rectify answer, type table to see the entire table ')
     
     def print_stats(self, total, passed):
         """
@@ -112,7 +114,7 @@ class InputOutput:
         self.clear_console()
         for (person, verb) in table_information:
             print(f'{person}, {verb}')
-        input("Press enter to continue")
+        input('Press enter to continue')
         
     def print_final_stats(self, total, incorrect, minutes, seconds, wrong):
         """
