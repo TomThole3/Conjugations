@@ -153,4 +153,3 @@ class GameLogic:
         """
         table_information = self.db.get_verb(infinitive, tense)
         self.io.print_table(table_information)
-         
