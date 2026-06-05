@@ -127,7 +127,7 @@ class GameLogic:
                     session.incorrect += 1 if repeat else 0
                     wrong.append(verb_list[0])
                 check = self.io.print_correct(answer)
-                if check == 'correct': # user informs that previous answer was correct
+                if check == 'correct': # user informs that previous answer was actually correct
                     wrong.pop()
                     verb_list.pop(max(0, wrong_index-1))
                 elif check == 'table':
