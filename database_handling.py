@@ -14,7 +14,11 @@ class DatabaseHandling:
         cwd = Path.cwd()
         self.db_path = cwd / 'verbs.db'
         self.excel_path = cwd / 'verbs.xlsx'
-
+        self.sheet_name = self.get_sheet_name()
+    
+    def get_sheet_name(self):
+        return pd.ExcelFile(self.excel_path).sheet_names[0]
+    
     def get_connection(self):
         """
         Establishes connection with the database
@@ -34,9 +38,8 @@ class DatabaseHandling:
         None.
         """
         ex = pd.read_excel(self.excel_path)
-        sheet_name = pd.ExcelFile(self.excel_path).sheet_names[0]
         with self.get_connection() as conn:
-            ex.to_sql(sheet_name, conn, if_exists='replace')
+            ex.to_sql(self.sheet_name, conn, if_exists='replace')
 
     def get_unique_values(self, column):
         """
@@ -54,7 +57,7 @@ class DatabaseHandling:
         """
         with self.get_connection() as conn:
             c = conn.cursor()
-            queried_names = c.execute(f"SELECT DISTINCT {column} FROM Blad1")
+            queried_names = c.execute(f"SELECT DISTINCT {column} FROM {self.sheet_name}")
             return [name for (name,) in queried_names.fetchall()]
 
     def get_filtered_entries(self, tenses, endings, powers, infinitives):
@@ -77,7 +80,7 @@ class DatabaseHandling:
         ending_placeholder = ', '.join('?' for _ in endings)
         power_placeholder = ', '.join('?' for _ in powers)
         infinitive_placeholder = ', '.join('?' for _ in infinitives)
-        query = f"""SELECT infinitive, tense, person, verb FROM Blad1
+        query = f"""SELECT infinitive, tense, person, verb FROM {self.sheet_name}
                     WHERE tense IN ({tense_placeholder})
                     AND ending IN ({ending_placeholder})
                     AND power IN ({power_placeholder})
@@ -103,6 +106,6 @@ class DatabaseHandling:
         """
         with self.get_connection() as conn:
             c = conn.cursor()
-            queried_names = c.execute("""SELECT person, verb FROM Blad1 WHERE infinitive = ? AND tense = ? """ , (infinitive, tense))
+            queried_names = c.execute(f"""SELECT person, verb FROM {self.sheet_name} WHERE infinitive = ? AND tense = ? """ , (infinitive, tense))
             names = queried_names.fetchall()
         return names
