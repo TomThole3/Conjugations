@@ -19,6 +19,7 @@ token.json
 *.db
 *.sqlite
 *.sqlite3
+~$*
 
 # OS / Editor files
 .DS_Store
