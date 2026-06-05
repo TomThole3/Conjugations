@@ -13,7 +13,7 @@ class DatabaseHandling:
     def __init__(self):
         cwd = Path.cwd()
         self.db_path = cwd / 'verbs.db'
-        self.excel_path = cwd / 'verbs.xlsx'
+        self.excel_path = cwd.parent / 'verbs.xlsx'
         self.sheet_name = self.get_sheet_name()
     
     def get_sheet_name(self):
