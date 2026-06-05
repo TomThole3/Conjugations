@@ -35,7 +35,7 @@ class Conjugar:
         """
         self.db.excel_to_db()
         tenses, endings, powers, infinitives = (self.io.get_filters(
-            self.db.get_unique_values(field), field) for field in ('tense', 'ending', 'power', 'infinitive'))
+            self.db.get_unique_values(field), field) for field in ('tense', 'ending', 'regularity', 'infinitive'))
         verbs = self.db.get_filtered_entries(tenses, endings, powers, infinitives)
         rand.shuffle(verbs)
         session = Session(len(verbs))
