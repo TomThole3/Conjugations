@@ -83,7 +83,7 @@ class DatabaseHandling:
         query = f"""SELECT infinitive, tense, person, verb FROM {self.sheet_name}
                     WHERE tense IN ({tense_placeholder})
                     AND ending IN ({ending_placeholder})
-                    AND power IN ({power_placeholder})
+                    AND regularity IN ({power_placeholder})
                     AND infinitive IN ({infinitive_placeholder})"""
         with self.get_connection() as conn:
             c = conn.cursor()
