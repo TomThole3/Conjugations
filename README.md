@@ -2,9 +2,9 @@
 This project is a console-based word repetition application to practice verb conjugations in Spanish. It is written in Python. I have written this program because of the lack of free practice software available with the functionality I wanted (rectification of answers, option to print tables). The user can make a selection of which verbs they want to practice based on infinitive, tense, ending or regularity, and will subsequently be tested. The verbs are stored in a SQLite3 database which can easily be edited through an excel file. 
 
 ## Requirements:
-Python 3.10+
-pandas
-openpyxl
+ - Python 3.10+
+ - pandas
+ - openpyxl
 
 ## Running the script
 To run the script, navigate to the folder using your console. Then, run main.py file (be sure to have python added to your PATH).
