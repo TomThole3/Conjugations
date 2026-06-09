@@ -96,17 +96,15 @@ class GameLogic:
         self.io = io
         self.db = db
         
-    def gameloop(self, verb_list, session, repeat = True):
+    def gameloop(self, verb_list, session, repeat=True):
         """
         Main loop of practicing verbs. Delegates question to IO and handles incorrect questions. 
         Recursively calls itself to repeat incorrect answers once
-
         Parameters
         ----------
         verb_list : list containing all words to be practiced.
         session : instance of session class belonging to this practice session
         repeat : whether this verb_list is a repetition of incorrect answers. The default is True
-
         Returns
         -------
         wrong : list of all words answered incorrectly on the first try
@@ -120,18 +118,18 @@ class GameLogic:
             wrong_index = min(3, len(verb_list)) # wrong answers are reasked after 3 words, except at the end of the list
             if user_answer != answer:
                 verb_list.insert(wrong_index, verb_list[0])
-                if verb_list[0] in wrong: # word has been answered incorrectly before
-                    session.total_words += 1 if repeat else 0 
-                else:
-                    session.total_words += 2 if repeat else 1 # +2 since it will get repeated in 3 words and during next phase
-                    session.incorrect += 1 if repeat else 0
-                    wrong.append(verb_list[0])
                 check = self.io.print_correct(answer)
                 if check == 'correct': # user informs that previous answer was actually correct
-                    wrong.pop()
-                    verb_list.pop(max(0, wrong_index-1))
-                elif check == 'table':
-                    self.table(infinitive, tense)
+                    verb_list.pop(wrong_index)
+                else:
+                    if verb_list[0] not in wrong: # first time answering incorrectly
+                        session.total_words += 2 if repeat else 1 # +2 since it will get repeated in 3 words and during next phase
+                        session.incorrect += 1 if repeat else 0
+                        wrong.append(verb_list[0])
+                    else:
+                        session.total_words += 1 if repeat else 0
+                    if check == 'table':
+                        self.table(infinitive, tense)
             session.passed += 1
             verb_list.pop(0)
         if repeat:
